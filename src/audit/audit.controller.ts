@@ -19,17 +19,17 @@ export class AuditController {
     const ms = payload.duration_ms ?? '-';
     const time = payload.timestamp ?? new Date().toISOString();
 
-    console.log(`\n─── tool call ──────────────────────────────`);
-    console.log(`  ${status}  ${payload.tool}`);
-    console.log(`  time     : ${time}`);
-    console.log(`  duration : ${ms}ms`);
-    if (payload.error) {
-      console.log(`  error    : ${payload.error}`);
-    }
-    if (payload.args !== null && payload.args !== undefined) {
-      console.log(`  args     : ${JSON.stringify(payload.args, null, 2)}`);
-    }
-    console.log(`────────────────────────────────────────────\n`);
+    const lines = [
+      `─── tool call ──────────────────────────────`,
+      `  ${status}  ${payload.tool}`,
+      `  time     : ${time}`,
+      `  duration : ${ms}ms`,
+    ];
+    if (payload.error) lines.push(`  error    : ${payload.error}`);
+    if (payload.args != null) lines.push(`  args     : ${JSON.stringify(payload.args)}`);
+    lines.push(`────────────────────────────────────────────`);
+
+    console.log(lines.join('\n'));
 
     return { ok: true };
   }
